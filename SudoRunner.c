@@ -17,25 +17,26 @@ int main() {
         }
     }
 
-    if (checkRow(grid) && checkColumn(grid) && checkSubGrid(grid)) {
+    if (checkRow(grid) && checkColumn(grid) && checkSubGrid(grid)) 
         printf("You won the Sudoku game!\n");
-    } else {
+
+     else 
         printf("You lost the Sudoku game!\n");
-    }
+    
+
 
     return 0;
 }
 
 bool checkRow(int grid[num][num]) {
     for (int i = 0; i < num; i++) {
-        bool seen[num + 1] = { false }; 
         for (int j = 0; j < num; j++) {
-            int Num = grid[i][j];
-            if (num >= 1 && num <= 9) {
-                if (seen[num]) {
-                    return false; 
+            int current = grid[i][j];
+            if (current < 1 || current > 9) continue;
+            for (int k = j + 1; k < num; k++) {
+                if (grid[i][k] == current) {
+                    return false;  
                 }
-                seen[num] = true;
             }
         }
     }
@@ -44,13 +45,13 @@ bool checkRow(int grid[num][num]) {
 
 bool checkColumn(int grid[num][num]) {
     for (int j = 0; j < num; j++) {
-        bool seen[num + 1] = { false };
         for (int i = 0; i < num; i++) {
-            int Num = grid[i][j];
-            if (num >= 1 && num <= 9) {
-                if (seen[num]) {
-                }
-                seen[num] = true;
+            int current = grid[i][j];
+            if (current < 1 || current > 9) continue; 
+            for (int k = i + 1; k < num; k++) {
+                if (grid[k][j] == current) 
+                    return false;  
+                
             }
         }
     }
@@ -58,18 +59,36 @@ bool checkColumn(int grid[num][num]) {
 }
 
 bool checkSubGrid(int grid[num][num]) {
-    for (int row = 0; row < num; row += 3) {
+    for (int row = 0; row < num; row += 3) {    
         for (int col = 0; col < num; col += 3) {
-            bool seen[num + 1] = { false };  
-            for (int i = row; i < row + 3; i++) {
-                for (int j = col; j < col + 3; j++) {
-                    int Num = grid[i][j];
-                    if (num >= 1 && num <= 9) {
-                        if (seen[num]) {
-                            return false;
-                        }
-                        seen[num] = true;
-                    }
+                //row 0-3,3-6,6-9 same as col
+                
+                
+                for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    int current = grid[row + i][col + j];
+                    if (current < 1 || current > 9) continue;  
+                   
+                   
+                    for (int k = i; k < 3; k++) {
+    if (k == i) {  //when same it remains in the subgrid 
+        for (int l = j + 1; l < 3; l++) { //inner loop<avoid cuurent with same number>
+            if (grid[row + k][col + l] == current) 
+                return false;
+            //k and l used for subgrid row colums check
+        }
+    } 
+    
+    
+    else { //part k>i ..<shit to next row>
+        for (int l = 0; l < 3; l++) {
+            if (grid[row + k][col + l] == current) {
+                return false;
+            }
+        }
+    }
+}
+
                 }
             }
         }
